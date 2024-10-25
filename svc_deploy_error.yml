@@ -1,0 +1,38 @@
+---
+# svc-blog
+kind: Service
+apiVersion: v1
+metadata:
+  name: svc-error            # rule에있는것과 동일해야함.
+spec:
+  selector:
+    app:  error
+  ports:
+  - port:  80
+    targetPort: 80
+
+---
+# deploy-shop
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: error
+  template:
+    metadata:
+      labels:
+        app: error
+    spec:
+      containers:
+      - name: error
+        image: kangdaeyoung/portal:error
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80

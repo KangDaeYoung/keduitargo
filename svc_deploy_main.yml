@@ -1,0 +1,38 @@
+---
+# svc-shop
+kind: Service
+apiVersion: v1
+metadata:
+  name: svc-main            # rule에있는것과 동일해야함.
+spec:
+  selector:
+    app: main
+  ports:
+  - port:  80
+    targetPort: 80
+
+---
+# deploy-shop
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: main
+  template:
+    metadata:
+      labels:
+        app: main
+    spec:
+      containers:
+      - name: main
+        image: kangdaeyoung/portal:main
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80
